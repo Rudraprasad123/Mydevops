@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="jquery-3.1.1.min.js"></script>
+    <script src="knockout-3.4.2.js"></script>
+    <script type="text/javascript">
+        
+
+        $(document).ready(function() {
+
+            var customerViewModel = function() {
+            var self = this;
+            self.F-Name = ko.observable("");
+            self.L-Name = ko.observable("");
+            self.EmailId = ko.observable("");
+            self.searchKey = ko.observable("");
+
+            self.getstudentinfo = function () {              
+                $.ajax({
+                    url: 'https://n8dg44orua.execute-api.ap-south-1.amazonaws.com/Rudra/getregisterstudents',
+                    cache: false,
+                    type: 'GET',                   
+                    data: { "EmailID": self.searchKey() },
+                    success: function (data) {              
+                        self.F-Name(data.Item.F-Name)
+                        self.L-Name(data.Item.L-Name),
+                        self.EmailId(data.Item.EmailID)
+                    }
+                });
+            }
+        }
+
+            var viewModel = new customerViewModel();
+            ko.applyBindings(viewModel);
+         });
+
+       
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Search Key(EmailID):</td>
+            <td><input type="text" id="txtSearchKey" data-bind="value : searchKey"/></td>
+        </tr>
+    </table>
+
+    <br />
+  
+    <table id="Getstudentinfo">
+        <thead>
+            <tr>
+                <td>First Name:</td>
+                <td><label id="F-Name" data-bind="text: F-Name"/></td>
+            </tr>
+
+            <tr>
+                <td>Last Name:</td>
+                <td><label id="L-Name" data-bind="text: L-Name"/></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><label id="EmailID" data-bind="text: EmailID"/></td>
+            </tr>
+          
+        </thead>
+      
+        </table>
+
+    <br />
+  
+  <table>
+<tr>
+    <td><input type="button" value="Getstudentinfo" data-bind="click: $root.getregisterstudents()"/></td>
+</tr>
+  </table>
+</body>
+</html>
